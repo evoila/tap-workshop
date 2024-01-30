@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: tap
+  description: The TAP team
+spec:
+  type: team
+  profile:
+    displayName: Team-TAP
+    email: infrastructure@example.com
+    picture: https://blogs.vmware.com/partnernews/files/2022/07/logo-vmware-tanzu-square-Header-327x324-1.png
+  # parent: ops
+  children: [operators, developers]
+  members: [mfuhrich]

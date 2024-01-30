@@ -1,0 +1,87 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: api-java-web-app-git
+  description: The demo API for java web app
+#  links:
+#    - url: https://WORKLOAD_NAME.NAMESPACE_NAME.tap.dieunkrauts.de/swagger-ui/index.html  # could be replaced with the endpoint of our own graphql
+#      title: API Definition Java Web App
+#      icon: docs
+spec:
+  type: openapi  # Specify the desired API type, e.g., "graphql" or "openapi"
+  lifecycle: experimental
+  owner: default-team
+  system: demo-app-java-web-app # Or specify system name of your choice
+  definition: |
+    openapi: 3.0.1
+    info:
+      title: OpenAPI definition
+      version: v0
+    servers:
+    - url: http://localhost:8080
+      description: Generated server url
+    paths:
+      "/lastResult":
+        get:
+          tags:
+          - hello-controller
+          operationId: lastResult
+          responses:
+            '200':
+              description: OK
+              content:
+                "*/*":
+                  schema:
+                    type: string
+      "/getPythonServer":
+        get:
+          tags:
+          - hello-controller
+          operationId: getPythonServer
+          responses:
+            '200':
+              description: OK
+              content:
+                "*/*":
+                  schema:
+                    type: string
+      "/add":
+        get:
+          tags:
+          - hello-controller
+          operationId: addition
+          parameters:
+          - name: first
+            in: query
+            required: false
+            schema:
+              type: integer
+              format: int32
+              default: 0
+          - name: second
+            in: query
+            required: false
+            schema:
+              type: integer
+              format: int32
+              default: 0
+          responses:
+            '200':
+              description: OK
+              content:
+                "*/*":
+                  schema:
+                    type: string
+      "/":
+        get:
+          tags:
+          - hello-controller
+          operationId: index
+          responses:
+            '200':
+              description: OK
+              content:
+                "*/*":
+                  schema:
+                    type: string
+    components: {}

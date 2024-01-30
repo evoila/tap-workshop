@@ -1,0 +1,13 @@
+#! Change "ID" with your own id or name
+#! "GROUP" with your group such as "developer"
+#! "NAME" with your name
+---
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: nginx-ID
+  labels:
+    workshop/group: "GROUP"
+    workshop/name: "NAME"
+spec:
+  image: nginx

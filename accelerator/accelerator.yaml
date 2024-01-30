@@ -1,0 +1,35 @@
+accelerator:
+  displayName: Evoila TAP-Workshop Accelerator
+  description: This is a simple accelerator for educational purposes
+  iconUrl: https://feedbax.de/media/4kypynpz/keyvisual.png
+  tags:
+    - education
+  options:
+    - name: replaceFourWith
+      inputType: text
+      label: What to replace \"vier\" with
+      required: true
+
+  imports:
+    - name: replace-eins
+
+engine:
+  merge:
+  - include: [ "**/*" ]
+    exclude: [ "README.md" ]
+  - include: [ "accelerator-input-files/simpletext" ]
+    chain:
+      - type: ReplaceText
+        substitutions:
+          - text: "drei"
+            with: "'drei vier'"
+      - type: ReplaceText
+        substitutions:
+          - text: "vier"
+            with: "'vier fuenf'"
+      - type: ReplaceText
+        substitutions:
+          - text: "vier"
+            with: "#replaceFourWith"
+      - type: InvokeFragment
+        reference: replace-eins

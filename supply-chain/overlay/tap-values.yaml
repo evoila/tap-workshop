@@ -1,0 +1,4 @@
+package_overlays:
+- name: ootb-supply-chain-testing-scanning
+  secrets:
+  - name: supply-chain-overlay-secret

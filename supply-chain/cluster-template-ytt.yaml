@@ -1,0 +1,32 @@
+#! Change "ID" with your own id or name
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterTemplate
+metadata:
+  name: app-deploy-ID
+spec:
+  ytt: |
+    #@ load("@ytt:data", "data")
+    #@ def id():
+    #@  return "ID"
+    #@ end
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: #@ "{}-deployment-{}".format(data.values.workload.metadata.name, id())
+      labels:
+        app: #@ "{}-{}".format(data.values.workload.metadata.name, id())
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: #@ "{}-{}".format(data.values.workload.metadata.name, id())
+      template:
+        metadata:
+          labels:
+            app: #@ "{}-{}".format(data.values.workload.metadata.name, id())
+        spec:
+          containers:
+            - name: #@ data.values.workload.metadata.name
+              image: #@ data.values.workload.spec.image

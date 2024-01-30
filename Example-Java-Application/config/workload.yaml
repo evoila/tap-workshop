@@ -1,0 +1,39 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: workload-name
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    #apps.tanzu.vmware.com/has-tests: "false"
+    apps.tanzu.vmware.com/auto-configure-actuators: "true"
+    app.kubernetes.io/part-of: workload-name
+    apis.apps.tanzu.vmware.com/register-api: "true"
+spec:
+  build:
+    env:
+      - name: BP_JVM_VERSION
+        value: "17"
+  params:
+  - name: catalog_path
+    value: none
+### uncomment to use api auto-registration - app requires an endpoint (path) that returns the api-docs
+#  - name: api_descriptor
+#    value:
+#      type: openapi
+#      location:
+#        path: "/v3/api-docs"
+#      system: mf-java-apps
+#      owner: developers
+#      description: "A set of API endpoints for the Java Web App"
+### uncomment if you want to use a token through a secret in order to access a private repository with the workload
+#  - name: gitops_ssh_secret
+#    value: secret-mf-test
+  - name: annotations
+    value:
+      autoscaling.knative.dev/minScale: "1"
+  source:
+    git:
+      url: https://github.com/JanKraut/tap-workshop/tree/main
+      ref:
+        branch: main
+    subPath: Example-Java-Application

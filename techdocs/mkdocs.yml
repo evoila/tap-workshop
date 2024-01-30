@@ -1,0 +1,10 @@
+site_name: Web-App-MF-Docs
+site_description: Testdocs für meine Anwendung
+plugins:
+  - techdocs-core
+repo_url: https://github.com/MaxFuhrich/tanzu-java-web-app-mf-git
+nav:
+  - Home: index.md
+  - Roadmap: roadmap.md
+  - Known Issues: known-issues.md
+  - FAQ: faq.md

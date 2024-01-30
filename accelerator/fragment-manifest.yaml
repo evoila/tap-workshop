@@ -1,0 +1,12 @@
+apiVersion: accelerator.apps.tanzu.vmware.com/v1alpha1
+kind: Fragment
+metadata:
+  name: replace-eins
+  namespace: accelerator-system
+spec:
+  displayName: Education Replace \"Eins\"
+  git:
+    ref:
+      branch: main
+    url: https://github.com/JanKraut/tap-workshop/
+    subPath: accelerator/fragments/replace

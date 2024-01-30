@@ -1,0 +1,32 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: generic-execute-alpine
+  namespace: tap-tasks
+spec:
+  stepTemplate:
+    securityContext:
+      allowPrivilegeEscalation: false
+      runAsUser: 1001
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: "RuntimeDefault"
+      runAsNonRoot: true
+  description: |-
+    A task that runs a generic command in an alpine container.
+  params:
+    - name: command
+      type: string
+      description: The command to run
+      default: echo "You need to specify a command to run"
+  steps:
+    - name: execute
+      image: alpine
+      command:
+        - sh
+        - -c
+      args:
+        - $(params.command)

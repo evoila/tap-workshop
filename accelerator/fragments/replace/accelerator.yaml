@@ -1,0 +1,27 @@
+accelerator:
+  displayName: Fragment for educational purposes (replaces \"eins\" with string from an option)
+
+  options:
+    - name: replaceEins
+      inputType: select
+      label: Replace \"Eins\" with
+      choices:
+        - value: "one"
+          text: one
+        - value: "uno"
+          text: uno
+        - value: "1"
+          text: "1"
+      defaultValue: "one"
+
+engine:
+  type: ReplaceText
+  substitutions:
+    - text: "Eins"
+      with: "#replaceEins"
+#  include: [ "**/*" ]
+#  chain:
+#    - type: ReplaceText
+#      substitutions:
+#        - text: "Eins"
+#          with: "#replaceEins"

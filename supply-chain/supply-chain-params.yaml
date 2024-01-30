@@ -1,0 +1,22 @@
+#! Change "ID" with your own id or name
+#! "GROUP" with your group such as "developer"
+#! "NAME" with your name
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterSupplyChain
+metadata:
+  name: supply-chain-ID
+spec:
+  selector:
+    workshop/group: "GROUP"
+    workshop/name: "NAME"
+  
+  params:
+    - name: replicas
+      default: 3
+
+  resources:
+    - name: deploy
+      templateRef:
+        name: app-deploy-ID
+        kind: ClusterTemplate

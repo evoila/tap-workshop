@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mfuhrich
+spec:
+  profile:
+    displayName: Max Fuhrich
+    email: mfuhrich@evoila.de
+    picture: https://avatars.githubusercontent.com/u/33356697?s=400&u=f8578acc777fc60bec4f300bbe5d7b8c7c4c62e0&v=4
+  memberOf: [tap]

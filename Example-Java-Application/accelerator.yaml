@@ -1,0 +1,52 @@
+accelerator:
+  displayName: Evoila TAP-Workshop Accelerator
+  description: This is a simple accelerator for educational purposes
+  iconUrl: https://feedbax.de/media/4kypynpz/keyvisual.png
+  tags:
+    - education
+    - -workshop
+  options:
+    - name: workloadName
+      inputType: text
+      label: Workload name
+      required: true
+      defaultValue: "test"
+
+engine:
+#  chain:
+#    - merge:
+#        - include: [ "**/*" ]
+#          exclude: [ "roottext" ]
+#        - include: [ "folder-1/simpletext" ]
+#          chain:
+#            - type: ReplaceText
+#              substitutions:
+#                - text: "drei"
+#                  with: "'drei vier'"
+#            - merge:
+#                - type: ReplaceText
+#                  substitutions:
+#                    - text: "vier"
+#                      with: "'vier fuenf'"
+#              #            - type: InvokeFragment
+#              #              reference: not-existing-fragment
+#              #            - include: [ "**" ]
+#              onConflict: UseFirst
+  merge:
+    - include: [ "**/*" ]
+    - include: [ "config/workload.yaml" ]
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: "accelerator-name"
+              with: "#workloadName"
+    - include: [ "catalog/component.yaml"]
+      chain:
+        - type: ReplaceText
+          regex:
+            pattern: "  name:.*"
+            with: "'  name: ' + #workloadName"
+        - type: ReplaceText
+          regex:
+            pattern: ".*kubernetes-label-selector.*"
+            with: "'    backstage.io/kubernetes-label-selector: app.kubernetes.io/part-of=' + #workloadName"

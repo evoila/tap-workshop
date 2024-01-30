@@ -1,0 +1,29 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: operators
+  description: The TAP-Operator team
+spec:
+  type: team
+  profile:
+    displayName: Team-TAP-Operators
+    email: tapoperators@example.com
+    picture: https://blogs.vmware.com/partnernews/files/2022/07/logo-vmware-tanzu-square-Header-327x324-1.png
+    parent: tap
+  children: []
+  # members: [mfuhrich]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: developers
+  description: The TAP-Developer team
+spec:
+  type: team
+  profile:
+    displayName: Team-TAP-Developers
+    email: tapdevelopers@example.com
+    picture: https://blogs.vmware.com/partnernews/files/2022/07/logo-vmware-tanzu-square-Header-327x324-1.png
+    parent: tap
+  children: []
+  members: [mfuhrich]
