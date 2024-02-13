@@ -4,7 +4,7 @@ This guide covers how to use an existing service class to create a service insta
 
 ## Managing Services
 
-You can list all services with
+You can list all avilable service classes with
 
 ```sh
 tanzu service class list
