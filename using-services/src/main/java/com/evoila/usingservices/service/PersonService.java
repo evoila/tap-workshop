@@ -2,6 +2,9 @@ package com.evoila.usingservices.service;
 
 import com.evoila.usingservices.PersonRepository;
 import com.evoila.usingservices.model.Person;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,10 @@ public class PersonService {
 
     public Person insertPerson(Person person) {
         return personRepository.save(person);
+    }
+
+    public List<Person> findAllPersons() {
+        return personRepository.findAll();
     }
     /*
     public Person getPersonByLastAndFirstName(String lastName, String firstName) {

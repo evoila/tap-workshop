@@ -3,6 +3,8 @@ package com.evoila.usingservices;
 
 import com.evoila.usingservices.model.Person;
 import com.evoila.usingservices.service.PersonService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -33,9 +35,23 @@ public class Controller {
     @Autowired
     private PersonService personService;
 
-    @PostMapping("/persons")
+    @PostMapping("/person")
     public Person addPerson(@RequestBody Person person) {
         return personService.insertPerson(person);
     }
+
+    @GetMapping("/persons")
+    public String findAllPersons() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(personService.findAllPersons());
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "Error occured";
+        //return personService.findAllPersons().toString();
+    }
+    
 
 }
