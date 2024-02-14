@@ -19,9 +19,9 @@ spec:
 #        type: openapi
 #        location:
 #          path: "/v3/api-docs"
-#        system: mf-java-apps
+#        system: mf-person-database
 #        owner: developers
-#        description: "A set of API endpoints for the Java Web App"
+#        description: "A set of API endpoints for the Java App for accessing a MonoDB database"
 #    - name: gitops_ssh_secret
 #      value: secret-mf
     - name: annotations
