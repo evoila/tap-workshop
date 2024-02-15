@@ -33,7 +33,7 @@ spec:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ClassClaim
       name: mongodb-claim-mf
-  - name: appsso-starter-java
+  - name: appsso
     ref:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ClassClaim
