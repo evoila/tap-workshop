@@ -1,7 +1,7 @@
 apiVersion: carto.run/v1alpha1
 kind: Workload
 metadata:
-  name: mf-mongodb-client
+  name: mf-mongodb-client-sso
   labels:
     apps.tanzu.vmware.com/workload-type: web
     #apps.tanzu.vmware.com/has-tests: "false"
@@ -33,6 +33,11 @@ spec:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ClassClaim
       name: mongodb-claim-mf
+  - name: appsso
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ClassClaim
+      name: mf-appsso
 #  source:
 #    git:
 #      url: https://github.com/MaxFuhrich/tanzu-java-web-app-mf-git
