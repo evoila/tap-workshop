@@ -1,0 +1,45 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: mf-sso-2
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    #apps.tanzu.vmware.com/has-tests: "false"
+    apps.tanzu.vmware.com/auto-configure-actuators: "true"
+    #apis.apps.tanzu.vmware.com/register-api: "true"
+    app.kubernetes.io/part-of: mf-sso
+spec:
+  build:
+    env:
+      - name: BP_JVM_VERSION
+        value: "17"
+  params:
+#    - name: api_descriptor
+#      value:
+#        type: openapi
+#        location:
+#          path: "/v3/api-docs"
+#        system: mf-person-database
+#        owner: developers
+#        description: "A set of API endpoints for the Java App for accessing a MonoDB database"
+#    - name: gitops_ssh_secret
+#      value: secret-mf
+    - name: annotations
+      value:
+        autoscaling.knative.dev/minScale: "1"
+  serviceClaims:
+  - name: mongodb
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ClassClaim
+      name: mongodb-claim-mf
+  - name: appsso
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ClassClaim
+      name: mf-appsso-2
+#  source:
+#    git:
+#      url: https://github.com/MaxFuhrich/tanzu-java-web-app-mf-git
+#      ref:
+#        branch: master
