@@ -33,7 +33,7 @@ spec:
       autoscaling.knative.dev/minScale: "1"
   source:
     git:
-      url: https://github.com/JanKraut/tap-workshop/tree/main
+      url: https://github.com/evoila/tap-workshop/tree/main
       ref:
         branch: main
     subPath: Example-Java-Application

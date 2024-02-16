@@ -30,37 +30,5 @@ public class OAuth2SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public OAuth2AuthorizedClientService authorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
-        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-    }
 
-
-    //Part for setting redirect-uri
-    @Bean
-    public OAuth2AuthorizedClientManager authorizedClientManager(
-            ClientRegistrationRepository clientRegistrationRepository,
-            OAuth2AuthorizedClientService authorizedClientService) {
-
-        OAuth2AuthorizedClientProvider authorizedClientProvider =
-                OAuth2AuthorizedClientProviderBuilder.builder()
-                        .authorizationCode()
-                        .refreshToken()
-                        .clientCredentials()
-                        .password()
-                        .build();
-
-        DefaultOAuth2AuthorizedClientManager authorizedClientManager =
-                new DefaultOAuth2AuthorizedClientManager(
-                        clientRegistrationRepository,
-                        new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService));
-
-        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
-
-        authorizedClientManager.setContextAttributesMapper(authorizeRequest ->
-                Map.of("redirect_uri", "https://mf-sso.dev-ns-03.tap.dieunkrauts.de/home"));
-                //Map.of("redirect_uri", "https://mf-sso.dev-ns-03.tap.dieunkrauts.de/login/oauth2/code/app-sso"));
-
-        return authorizedClientManager;
-    }
 }
