@@ -20,9 +20,13 @@ public class PersonService {
     public List<Person> findAllPersons() {
         return personRepository.findAll();
     }
-    /*
-    public Person getPersonByLastAndFirstName(String lastName, String firstName) {
-        return personRepository.findByLastAndFirstName(lastName, firstName).get(0);
+
+    public Person getPersonByLastNameAndFirstName(String lastName, String firstName) {
+        return personRepository.findByLastNameAndFirstName(lastName, firstName).get(0);
     }
-    */
+
+    public void deletePersonByLastNameAndFirstName(String lastName, String firstName) {
+        personRepository.deleteByLastNameAndFirstName(lastName, firstName);
+    }
+
 }

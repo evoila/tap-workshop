@@ -19,14 +19,9 @@ import java.util.Collections;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 
 @RestController
@@ -48,14 +43,24 @@ public class Controller {
         } catch (JsonProcessingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return e.getMessage();
         }
-        return "Error occured";
-        //return personService.findAllPersons().toString();
     }
-    
 
-    @GetMapping("/home")
-    public String home(){
-        return "home";
+    @GetMapping("/person")
+    public String findPerson(@RequestParam String lastName, @RequestParam String firstName) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(personService.getPersonByLastNameAndFirstName(lastName, firstName));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    @DeleteMapping("/person")
+    public String deltePerson(@RequestParam String lastName, String firstName) {
+        personService.deletePersonByLastNameAndFirstName(lastName, firstName);
+        return "Person deleted successfully";
     }
 }
