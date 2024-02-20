@@ -23,7 +23,6 @@ public class MongoConfig {
             System.exit(1);
         }
         String uri =  "mongodb://" + bindings[0].get("username") + ":" + bindings[0].get("password") + "@" + bindings[0].get("host") + ":" + bindings[0].get("port") + "/" + bindings[0].get("database");
-        //return null;
         return MongoClients.create(uri);
     }
 
