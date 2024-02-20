@@ -87,10 +87,19 @@ The following shows an example of binding a secret:
 A Swagger documentation for an API can be created automatically. The requirement to do so is an endpoint that provides
 API docs as YAML or JSON.
 
-In order to automatically register the api, add a parameter to the workload spec with the name _api_descriptor_ like
+In order to automatically register the api, add the label
+```yaml
+apis.apps.tanzu.vmware.com/register-api: "true"
+```
+a parameter to the workload spec with the name _api_descriptor_ like
 shown in the example:
 
 ```yaml
+...
+metadata:
+  labels:
+    apis.apps.tanzu.vmware.com/register-api: "true"
+    ...
 spec:
   params:
     - name: api_descriptor
