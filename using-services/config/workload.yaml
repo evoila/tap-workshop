@@ -6,7 +6,7 @@ metadata:
     apps.tanzu.vmware.com/workload-type: web
     #apps.tanzu.vmware.com/has-tests: "false"
     apps.tanzu.vmware.com/auto-configure-actuators: "true"
-    #apis.apps.tanzu.vmware.com/register-api: "true"
+    apis.apps.tanzu.vmware.com/register-api: "true"
     app.kubernetes.io/part-of: mongodb-client-api
 spec:
   build:
