@@ -10,83 +10,6 @@ spec:
   publishConnectionDetailsWithStoreConfigRef:
     name: default
   resources:
-  # Namespace
-  - base:
-      apiVersion: kubernetes.crossplane.io/v1alpha1
-      kind: Object
-      spec:
-        forProvider:
-          manifest:
-            apiVersion: v1
-            kind: Namespace
-    patches:
-    - fromFieldPath: metadata.name
-      toFieldPath: spec.forProvider.manifest.metadata.name
-      type: FromCompositeFieldPath
-    readinessChecks:
-    - matchCondition:
-        status: "True"
-        type: Ready
-      type: MatchCondition
-  # MariaDB
-  - base:
-      apiVersion: kubernetes.crossplane.io/v1alpha1
-      kind: Object
-      spec:
-        forProvider:
-          manifest:
-            apiVersion: mariadb.mmontes.io/v1alpha1
-            kind: MariaDB
-            spec:
-              image: mariadb:11.0.3
-              imagePullPolicy: IfNotPresent
-              resources:
-                limits:
-                  cpu: 300m
-                  memory: 512Mi
-                requests:
-                  cpu: 100m
-                  memory: 128Mi
-              port: 3306
-              username: mariadb
-              passwordSecretKeyRef:
-                key: mariadb-passwords
-              rootPasswordSecretKeyRef:
-                key: mariadb-root-password
-              volumeClaimTemplate:
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 1Gi
-    patches:
-      - fromFieldPath: metadata.name
-        toFieldPath: spec.forProvider.manifest.metadata.namespace
-        type: FromCompositeFieldPath
-      - fromFieldPath: metadata.name
-        toFieldPath: spec.forProvider.manifest.metadata.name
-        type: FromCompositeFieldPath
-      - fromFieldPath: metadata.name
-        toFieldPath: spec.forProvider.manifest.spec.template.metadata.labels.app
-        type: FromCompositeFieldPath
-      - fromFieldPath: spec.storageGB
-        toFieldPath: spec.forProvider.manifest.spec.volumeClaimTemplate.resources.requests.storage
-        transforms:
-        - string:
-            fmt: '%dGi'
-            type: Format
-          type: string
-        type: FromCompositeFieldPath
-      - fromFieldPath: metadata.name
-        toFieldPath: spec.forProvider.manifest.spec.passwordSecretKeyRef.name
-        type: FromCompositeFieldPath
-      - fromFieldPath: metadata.name
-        toFieldPath: spec.forProvider.manifest.spec.rootPasswordSecretKeyRef.name
-        type: FromCompositeFieldPath
-    readinessChecks:
-      - type: MatchString
-        fieldPath: status.atProvider.manifest.status.conditions[0].status 
-        matchString: "True"
   # Secret
   - base:
       apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -218,3 +141,143 @@ spec:
         status: "True"
         type: Ready
       type: MatchCondition
+  # Namespace
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: v1
+            kind: Namespace
+    patches:
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.name
+      type: FromCompositeFieldPath
+    readinessChecks:
+    - matchCondition:
+        status: "True"
+        type: Ready
+      type: MatchCondition
+  # MariaDB
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: mariadb.mmontes.io/v1alpha1
+            kind: MariaDB
+            spec:
+              image: mariadb:11.0.3
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: 300m
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+              port: 3306
+              username: mariadb
+              passwordSecretKeyRef:
+                key: mariadb-passwords
+              rootPasswordSecretKeyRef:
+                key: mariadb-root-password
+              volumeClaimTemplate:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+    patches:
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.metadata.namespace
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.metadata.name
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.spec.template.metadata.labels.app
+        type: FromCompositeFieldPath
+      - fromFieldPath: spec.storageGB
+        toFieldPath: spec.forProvider.manifest.spec.volumeClaimTemplate.resources.requests.storage
+        transforms:
+        - string:
+            fmt: '%dGi'
+            type: Format
+          type: string
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.spec.passwordSecretKeyRef.name
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.spec.rootPasswordSecretKeyRef.name
+        type: FromCompositeFieldPath
+    readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.manifest.status.conditions[0].status 
+        matchString: "True"
+  # Database
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: mariadb.mmontes.io/v1alpha1
+            kind: Database
+            spec:
+              characterSet: utf8
+              collate: utf8_general_ci
+              retryInterval: 5s
+    patches:
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.spec.mariaDbRef.name
+      type: FromCompositeFieldPath
+    readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.manifest.status.conditions[0].status 
+        matchString: "True"
+  # Grant
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: mariadb.mmontes.io/v1alpha1
+            kind: Grant
+            spec:
+              grantOption: true
+              host: "%"
+              privileges:
+                - SELECT
+                - INSERT
+                - UPDATE
+              retryInterval: 5s
+              table: "*"
+              username: mariadb
+    patches:
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.spec.mariaDbRef.name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.spec.database
+      type: FromCompositeFieldPath
+    readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.manifest.status.conditions[0].status 
+        matchString: "True"
