@@ -1,0 +1,22 @@
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ClassClaim
+metadata:
+  annotations:
+    classclaims.services.apps.tanzu.vmware.com/xrd-name: xworkloadregistrations.sso.apps.tanzu.vmware.com
+  name: customer-profile-frontend-sso
+spec:
+  classRef:
+    name: dev-auth
+  parameters:
+    authorizationGrantTypes:
+    - authorization_code
+    clientAuthenticationMethod: none
+    redirectPaths:
+    - /
+    - /user-profile
+    - /customer-profiles/list
+    scopes:
+    - name: openid
+    workloadRef:
+      name: customer-profile-frontend

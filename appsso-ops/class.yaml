@@ -1,0 +1,17 @@
+---
+apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
+kind: ClusterWorkloadRegistrationClass
+metadata:
+  name: dev-auth
+spec:
+  description:
+    short: Login by AppSSO unsafe user:password
+  base:
+    metadata:
+      annotations:
+        sso.apps.tanzu.vmware.com/template-unsafe-redirect-uris: ""
+    spec:
+      workloadDomainTemplate: "{{.Name}}.{{.Namespace}}.{{.Domain}}"
+      authServerSelector:
+        matchLabels:
+          app.kubernetes.io/name: unsafe-dev-auth

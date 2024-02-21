@@ -1,0 +1,220 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: mariadbs.evoila.de
+spec:
+  compositeTypeRef:
+    apiVersion: evoila.de/v1alpha1
+    kind: MariaDB
+  publishConnectionDetailsWithStoreConfigRef:
+    name: default
+  resources:
+  # Namespace
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: v1
+            kind: Namespace
+    patches:
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.name
+      type: FromCompositeFieldPath
+    readinessChecks:
+    - matchCondition:
+        status: "True"
+        type: Ready
+      type: MatchCondition
+  # MariaDB
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: mariadb.mmontes.io/v1alpha1
+            kind: MariaDB
+            spec:
+              image: mariadb:11.0.3
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: 300m
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+              port: 3306
+              username: mariadb
+              passwordSecretKeyRef:
+                key: mariadb-passwords
+              rootPasswordSecretKeyRef:
+                key: mariadb-root-password
+              volumeClaimTemplate:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+    patches:
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.metadata.namespace
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.metadata.name
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.spec.template.metadata.labels.app
+        type: FromCompositeFieldPath
+      - fromFieldPath: spec.storageGB
+        toFieldPath: spec.forProvider.manifest.spec.volumeClaimTemplate.resources.requests.storage
+        transforms:
+        - string:
+            fmt: '%dGi'
+            type: Format
+          type: string
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.spec.passwordSecretKeyRef.name
+        type: FromCompositeFieldPath
+      - fromFieldPath: metadata.name
+        toFieldPath: spec.forProvider.manifest.spec.rootPasswordSecretKeyRef.name
+        type: FromCompositeFieldPath
+    readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.manifest.status.conditions[0].status 
+        matchString: "True"
+  # Secret
+  - base:
+      apiVersion: kubernetes.crossplane.io/v1alpha1
+      kind: Object
+      spec:
+        providerConfigRef:
+          name: default
+        forProvider:
+          manifest:
+            apiVersion: secretgen.k14s.io/v1alpha1
+            kind: Password
+            metadata:
+              namespace: ""
+            spec:
+              length: 32
+              secretTemplate:
+                type: connection.crossplane.io/v1alpha1
+                stringData:
+                  mariadb-passwords: $(value)
+                  mariadb-root-password: $(value)
+                  port: "3306"
+                  provider: evoila
+                  type: mariadb
+                  username: mariadb
+        connectionDetails:
+        - apiVersion: v1
+          fieldPath: data.provider
+          kind: Secret
+          toConnectionSecretKey: provider
+        - apiVersion: v1
+          fieldPath: data.type
+          kind: Secret
+          toConnectionSecretKey: type
+        - apiVersion: v1
+          fieldPath: spec.clusterIP
+          kind: Service
+          toConnectionSecretKey: host
+        - apiVersion: v1
+          fieldPath: data.port
+          kind: Secret
+          toConnectionSecretKey: port
+        - apiVersion: v1
+          fieldPath: data.database
+          kind: Secret
+          toConnectionSecretKey: database
+        - apiVersion: v1
+          fieldPath: data.username
+          kind: Secret
+          toConnectionSecretKey: username
+        - apiVersion: v1
+          fieldPath: data.mariadb-passwords
+          kind: Secret
+          toConnectionSecretKey: password
+        writeConnectionSecretToRef:
+          namespace: crossplane-system
+    connectionDetails:
+    - fromConnectionSecretKey: provider
+    - fromConnectionSecretKey: type
+    - fromConnectionSecretKey: host
+    - fromConnectionSecretKey: port
+    - fromConnectionSecretKey: database
+    - fromConnectionSecretKey: username
+    - fromConnectionSecretKey: password
+    patches:
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.metadata.name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.spec.secretTemplate.stringData.database
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.forProvider.manifest.spec.secretTemplate.stringData.host
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.uid
+      toFieldPath: spec.writeConnectionSecretToRef.name
+      transforms:
+      - string:
+          fmt: '%s-mariadb'
+          type: Format
+        type: string
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[0].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[1].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[2].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[3].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[4].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[5].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[6].name
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[0].namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[1].namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[2].namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[3].namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[4].namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[5].namespace
+      type: FromCompositeFieldPath
+    - fromFieldPath: metadata.name
+      toFieldPath: spec.connectionDetails[6].namespace
+      type: FromCompositeFieldPath
+    readinessChecks:
+    - matchCondition:
+        status: "True"
+        type: Ready
+      type: MatchCondition
