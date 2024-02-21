@@ -1,0 +1,12 @@
+---
+apiVersion: secretgen.k14s.io/v1alpha1
+kind: RSAKey
+metadata:
+  name: unsafe-dev-auth-signing-key
+  namespace: appsso
+spec:
+  secretTemplate:
+    type: Opaque
+    stringData:
+      key.pem: $(privateKey)
+      pub.pem: $(publicKey)

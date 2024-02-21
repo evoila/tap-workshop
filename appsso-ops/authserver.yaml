@@ -1,0 +1,53 @@
+---
+apiVersion: "sso.apps.tanzu.vmware.com/v1alpha1"
+kind: AuthServer
+metadata:
+  name: unsafe-dev-auth
+  namespace: appsso
+  labels:
+    app.kubernetes.io/component: auth-server
+    app.kubernetes.io/created-by: controller
+    app.kubernetes.io/managed-by: sso.apps.tanzu.vmware.com
+    app.kubernetes.io/name: unsafe-dev-auth
+  annotations:
+    sso.apps.tanzu.vmware.com/allow-client-namespaces: '*'
+    sso.apps.tanzu.vmware.com/allow-unsafe-cors: ""
+    sso.apps.tanzu.vmware.com/allow-unsafe-identity-provider: ""
+    sso.apps.tanzu.vmware.com/allow-unsafe-issuer-uri: ""
+spec:
+  replicas: 1
+  cors:
+    allowAllOrigins: true
+    allowCredentials: true
+    allowHeaders:
+    - '*'
+    allowMethods:
+    - '*'
+    exposeHeaders:
+    - '*'
+  logging: '{}'
+  redisResources: {}
+  resources: {}
+  server: '{}'
+  session:
+    expiry: 15m
+  tls:
+    issuerRef:
+      name: letsencrypt-cluster-issuer
+      kind: ClusterIssuer  
+  identityProviders:
+  - internalUnsafe:
+      users:
+      - claims:
+          email: user@example.com
+          first_name: First-Name
+          last_name: Last-Name
+        password: password
+        roles:
+        - user
+        - test
+        username: user
+    name: unsafe-test-users
+  tokenSignature:
+    signAndVerifyKeyRef:
+      name: "unsafe-dev-auth-signing-key"
