@@ -32,7 +32,12 @@ spec:
     ref:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ClassClaim
-      name: mongodb-claim-mf
+      name: workshop-mongodb-claim
+  - name: workshop-secret
+    ref:
+      apiVersion: v1
+      kind: Secret
+      name: workshop-secret
   source:
     git:
       url: https://github.com/evoila/tap-workshop/tree/main

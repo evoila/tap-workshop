@@ -7,6 +7,8 @@
 ```shell
 npm install -g @techdocs/cli
 ```
+- A component in the developer portal that the techdocs can be associated with. [Catalog](../catalog/README.md)
+describes how to create a component in the developer portal.
 
 ## Generating and publishing TechDocs
 

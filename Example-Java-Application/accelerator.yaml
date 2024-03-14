@@ -13,25 +13,6 @@ accelerator:
       defaultValue: "test"
 
 engine:
-#  chain:
-#    - merge:
-#        - include: [ "**/*" ]
-#          exclude: [ "roottext" ]
-#        - include: [ "folder-1/simpletext" ]
-#          chain:
-#            - type: ReplaceText
-#              substitutions:
-#                - text: "drei"
-#                  with: "'drei vier'"
-#            - merge:
-#                - type: ReplaceText
-#                  substitutions:
-#                    - text: "vier"
-#                      with: "'vier fuenf'"
-#              #            - type: InvokeFragment
-#              #              reference: not-existing-fragment
-#              #            - include: [ "**" ]
-#              onConflict: UseFirst
   merge:
     - include: [ "**/*" ]
     - include: [ "config/workload.yaml" ]

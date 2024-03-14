@@ -19,18 +19,8 @@ spec:
   params:
   - name: catalog_path
     value: none
-### uncomment to use api auto-registration - app requires an endpoint (path) that returns the api-docs
-#  - name: api_descriptor
-#    value:
-#      type: openapi
-#      location:
-#        path: "/v3/api-docs"
-#      system: mf-java-apps
-#      owner: developers
-#      description: "A set of API endpoints for the Java Web App"
-### uncomment if you want to use a token through a secret in order to access a private repository with the workload
-#  - name: gitops_ssh_secret
-#    value: secret-mf-test
+  - name: gitops_ssh_secret
+    value: #name of the referenced secret
   - name: annotations
     value:
       autoscaling.knative.dev/minScale: "1"

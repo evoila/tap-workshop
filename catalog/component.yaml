@@ -3,11 +3,11 @@ kind: Component
 metadata:
   name: component name
   description: Tanzu Java Web App
-  tags:
+  tags: # Include tags to your liking, these are used for organization in the developer portal
     - education
     - workshop
   annotations:
-    backstage.io/kubernetes-label-selector: app.kubernetes.io/part-of=workload-name
+    backstage.io/kubernetes-label-selector: app.kubernetes.io/part-of=workload-name # Change to name of actual workload
 spec:
   type: service
   lifecycle: experimental
