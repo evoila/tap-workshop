@@ -6,6 +6,9 @@ Each directory covers a different task/feature of TAP and contains its own readm
 commands) and example application (where appropriate) with a workload for deploying the application from this 
 repository.
 
+If you are completely new however, it is recommended to start with the 
+[beginner guide](pages/TAP-Developer-Starter-Guide.md) that covers the basics on how to use TAP and set up your IDE.
+
 ## Covered features/tasks for developers
 - [Using Accelerators](accelerator/README.md)
 
