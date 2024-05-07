@@ -33,3 +33,5 @@ Additionally, the accelerator can be used locally (still requires the fragments 
 ```shell
 tanzu accelerator generate-from-local --accelerator-path workshop=. --fragment-paths replace-eins=fragments/replace --options '{"replaceFourWith":"pizza", "replaceEins":"uno"}' --output-dir generated-project --server-url $DEVELOPERPORTAL
 ```
+
+Either set _DEVELOPERPORTAL_ to the url of your developer portal or provide the url directly.
