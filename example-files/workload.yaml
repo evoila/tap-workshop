@@ -1,0 +1,26 @@
+apiVersion: supplychains.tanzu.vmware.com/v1alpha1
+kind: KnativeAppIterateV1
+metadata:
+  name: backend-test
+spec:
+  source:
+    git:
+      url: "https://gitlab.lab.ricket-son.de/tap/source-code/java-backend.git"
+      branch: "master"
+  apiDescriptor:
+    type: openapi
+    location: 
+      path: "/api-docs"
+    owner: dev
+    system: user-dictionary
+    description: Verwaltung von Personen
+  build:
+    env:
+    - name: "BP_JVM_VERSION"
+      value: "17"
+  serviceClaims:
+    - name: database
+      ref:
+        apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+        kind: ClassClaim
+        name: customer-database-max
